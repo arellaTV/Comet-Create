@@ -18,10 +18,6 @@ class App extends React.Component {
   }
 
   resizeHeight(newBreakpoint, newCols) {
-    debugger;
-    console.log('breakpoint changed!');
-    console.log('newBreakpoint:', newBreakpoint);
-    console.log('newCols:', newCols);
     var heights = {
       lg: 100,
       md: 83,
