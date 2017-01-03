@@ -19,5 +19,11 @@
   "bugs": {
     "url": "https://github.com/arellaTV/Comet-Create/issues"
   },
-  "homepage": "https://github.com/arellaTV/Comet-Create#readme"
+  "homepage": "https://github.com/arellaTV/Comet-Create#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "webpack": "^1.14.0"
+  }
 }
