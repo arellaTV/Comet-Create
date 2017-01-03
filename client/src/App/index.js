@@ -5,7 +5,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      layout: []
+      layout: [],
+      images: {}
     }
 
     this.updateLayout = this.updateLayout.bind(this);
@@ -19,9 +20,8 @@ class App extends React.Component {
     var app = this;
     fetch('/api/page')
       .then(response => response.json())
-      .then(layout => {
-        console.log(layout);
-        app.setState({ layout });
+      .then(page => {
+        app.setState(page);
       });
   }
 
@@ -40,7 +40,16 @@ class App extends React.Component {
   }
 
   updateLayout(layout) {
-    this.postPage(layout);
+    // console.log(layout);
+    // this.postPage(layout);
+  }
+
+  checkHeight(layout, oldItem, newItem, placeholder, e, element) {
+    const currentHeight = newItem.y + newItem.h;
+    // console.log(currentHeight);
+    // if (currentHeight > newItem.maxH) {
+    //   console.log('bigger than container height');
+    // }
   }
 
   render() {
@@ -48,10 +57,20 @@ class App extends React.Component {
       <div>
         <h1>Hello World</h1>
         <Grid className='layout' layout={this.state.layout}
-        onLayoutChange={this.updateLayout} cols={8} rowHeight={80} width={640}>
+        onLayoutChange={this.updateLayout} cols={8} rowHeight={80} width={640}
+        onResizeStop={this.checkHeight}>
           {this.state.layout.map(panel => {
+            let image = this.state.images[panel.i];
+            let image_src = '';
+            let image_style = {};
+            if (image) {
+              image_src = image.src;
+              image_style = image.style;
+            }
             return (
-              <div key={panel.i}>{panel.i}</div>
+              <div key={panel.i}>
+                <img className='images' src={image_src} style={image_style}/>
+              </div>
             )
           })}
         </Grid>
