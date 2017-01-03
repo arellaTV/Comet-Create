@@ -1,6 +1,6 @@
 .layout {
   background-color: black;
-  width: 640px;
+  margin: 0 auto;
 }
 
 .react-grid-item{

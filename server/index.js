@@ -16,9 +16,9 @@ router.use((req, res, next) => {
 });
 
 var tempStorage = [
-  {i: 'a', x: 0, y: 0, w: 8, h: 4, maxW: 8, maxH: 4},
-  {i: 'b', x: 0, y: 4, w: 4, h: 4, maxW: 8, maxH: 4},
-  {i: 'c', x: 4, y: 4, w: 4, h: 4, maxW: 8, maxH: 4},
+  {i: 'a', x: 0, y: 0, w: 8, h: 4, maxW: 8, maxH: 8},
+  {i: 'b', x: 0, y: 4, w: 4, h: 4, maxW: 8, maxH: 8},
+  {i: 'c', x: 4, y: 4, w: 4, h: 4, maxW: 8, maxH: 8},
 ];
 
 var imageStorage = {

@@ -4,9 +4,13 @@ import Grid from 'react-grid-layout';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    var width = window.outerWidth / 2 - 9;
+    var rowHeight = width / 15;
     this.state = {
       layout: [],
-      images: {}
+      images: {},
+      width,
+      rowHeight,
     }
 
     this.updateLayout = this.updateLayout.bind(this);
@@ -14,6 +18,14 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getPage();
+    window.addEventListener("resize", () => {
+      var width = window.outerWidth / 2 - 9;
+      var rowHeight = width / 15;
+      this.setState({
+        width,
+        rowHeight
+      })
+    })
   }
 
   getPage() {
@@ -40,16 +52,7 @@ class App extends React.Component {
   }
 
   updateLayout(layout) {
-    // console.log(layout);
-    // this.postPage(layout);
-  }
-
-  checkHeight(layout, oldItem, newItem, placeholder, e, element) {
-    const currentHeight = newItem.y + newItem.h;
-    // console.log(currentHeight);
-    // if (currentHeight > newItem.maxH) {
-    //   console.log('bigger than container height');
-    // }
+    this.postPage(layout);
   }
 
   render() {
@@ -57,8 +60,9 @@ class App extends React.Component {
       <div>
         <h1>Hello World</h1>
         <Grid className='layout' layout={this.state.layout}
-        onLayoutChange={this.updateLayout} cols={8} rowHeight={80} width={640}
-        onResizeStop={this.checkHeight}>
+        onLayoutChange={this.updateLayout} cols={8}
+        rowHeight={this.state.rowHeight} width={this.state.width}
+        style={{ width: this.state.width }}>
           {this.state.layout.map(panel => {
             let image = this.state.images[panel.i];
             let image_src = '';
