@@ -15,7 +15,12 @@ class App extends React.Component {
     this.updateLayout = this.updateLayout.bind(this);
   }
 
-  getPage() {}
+  getPage() {
+    var app = this;
+    fetch('/api/page')
+      .then(response => response.json())
+      .then(layout => app.setState({ layout }))
+  }
 
   updateLayout(layout) {
     this.setState({ layout });
