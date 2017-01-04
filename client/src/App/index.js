@@ -19,6 +19,7 @@ class App extends React.Component {
     this.selectPanel = this.selectPanel.bind(this);
     this.toggle = this.toggle.bind(this);
     this.addPanel = this.addPanel.bind(this);
+    this.uploadImage = this.uploadImage.bind(this);
   }
 
   componentDidMount() {
@@ -44,7 +45,10 @@ class App extends React.Component {
 
   postPage(layout) {
     var app = this;
-    var body = { layout }
+    var body = {
+      layout,
+      images: this.state.images
+    }
     fetch('/api/page', {
       method: 'POST',
       headers: {
@@ -53,7 +57,12 @@ class App extends React.Component {
       body: JSON.stringify(body)
     })
       .then(response => response.json())
-      .then(layout => app.setState({ layout }))
+      .then(page => {
+        app.setState({
+          layout: page.layout,
+          images: page.images
+        })
+      });
   }
 
   updateLayout(layout) {
@@ -61,7 +70,7 @@ class App extends React.Component {
   }
 
   toggle(selection) {
-    this.state.currentSelection = {};
+    this.setState({ currentSelection: {} })
 
     var panels = document.getElementsByClassName('panel-container');
     for (var i = 0; i < panels.length; i++) {
@@ -76,6 +85,7 @@ class App extends React.Component {
       selection.classList.add('selected');
       this.setState({ currentSelection: selection })
     }
+
   }
 
   selectPanel(e) {
@@ -92,7 +102,7 @@ class App extends React.Component {
     this.state.counter++;
     var panel = {
       i: this.state.counter.toString(),
-      x: this.state.layout.length * 2 % 12,
+      x: 0,
       y: 0,
       w: 4,
       h: 4,
@@ -104,11 +114,32 @@ class App extends React.Component {
     this.postPage(layout);
   }
 
+  uploadImage(e) {
+    e.preventDefault();
+    var inputURL = e.target[0].value;
+    if (this.state.currentSelection.id) {
+      var panelId = this.state.currentSelection.id;
+      this.state.images[panelId] = {};
+      this.state.images[panelId].src = inputURL;
+      this.state.images[panelId].style = {
+        width: '100%',
+        margin: 'auto auto'
+      }
+      this.setState({ images: this.state.images });
+      this.postPage(this.state.layout)
+    }
+  }
+
   render() {
     return (
       <div>
         <h1>Comet</h1>
+        <h3>Current Selection: {this.state.currentSelection.id}</h3>
         <button onClick={this.addPanel}>Add Panel</button>
+        <form onSubmit={this.uploadImage}>
+          <input type='text' />
+          <input type='submit' />
+        </form>
         <Grid className='layout' layout={this.state.layout}
         onLayoutChange={this.updateLayout} cols={8}
         rowHeight={this.state.rowHeight} width={this.state.width}
@@ -123,7 +154,7 @@ class App extends React.Component {
             }
             return (
               <div key={panel.i}>
-                <div className='panel-container' onClick={this.selectPanel}>
+                <div className='panel-container' id={panel.i} onClick={this.selectPanel}>
                   <img className='images' src={image_src} style={image_style}/>
                 </div>
               </div>

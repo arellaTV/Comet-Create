@@ -11,7 +11,9 @@ app.use(bodyParser.json());
 app.use('/api', router);
 
 router.use((req, res, next) => {
-  console.log('Time:', Date.now());
+  var date = new Date();
+  var currentTime = `${date.getHours() + 1}:${date.getMinutes() + 1}:${date.getSeconds() + 1}`;
+  console.log('Time:', currentTime);
   next();
 });
 
@@ -25,7 +27,7 @@ var imageStorage = {
   a: {
     src: 'http://blog.spoongraphics.co.uk/wp-content/uploads/2016/sketch-effect/sketch-effect-sm-cropped.jpg',
     style: {
-      width: '50%',
+      width: '100%',
       margin: 'auto auto'
     }
   }
@@ -43,9 +45,13 @@ router.route('/page')
   .post((req, res) => {
     console.log('posting');
     let layout = req.body.layout;
+    let images = req.body.images;
     tempStorage = layout;
-    console.log(tempStorage);
-    res.json(tempStorage);
+    imageStorage = images;
+    res.json({
+      layout: tempStorage,
+      images: imageStorage
+    });
   });
 
 app.listen(port, () => {
