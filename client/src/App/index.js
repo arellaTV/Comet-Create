@@ -11,12 +11,14 @@ class App extends React.Component {
       images: {},
       width,
       rowHeight,
-      currentSelection: {}
+      currentSelection: {},
+      counter: 0
     }
 
     this.updateLayout = this.updateLayout.bind(this);
     this.selectPanel = this.selectPanel.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.addPanel = this.addPanel.bind(this);
   }
 
   componentDidMount() {
@@ -86,10 +88,27 @@ class App extends React.Component {
     }
   }
 
+  addPanel() {
+    this.state.counter++;
+    var panel = {
+      i: this.state.counter.toString(),
+      x: this.state.layout.length * 2 % 12,
+      y: 0,
+      w: 4,
+      h: 4,
+      maxW: 8,
+      maxH: 8
+    }
+
+    var layout = this.state.layout.concat(panel);
+    this.postPage(layout);
+  }
+
   render() {
     return (
       <div>
-        <h1>Hello World</h1>
+        <h1>Comet</h1>
+        <button onClick={this.addPanel}>Add Panel</button>
         <Grid className='layout' layout={this.state.layout}
         onLayoutChange={this.updateLayout} cols={8}
         rowHeight={this.state.rowHeight} width={this.state.width}
