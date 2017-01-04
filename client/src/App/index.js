@@ -11,9 +11,12 @@ class App extends React.Component {
       images: {},
       width,
       rowHeight,
+      currentSelection: {}
     }
 
     this.updateLayout = this.updateLayout.bind(this);
+    this.selectPanel = this.selectPanel.bind(this);
+    this.toggle = this.toggle.bind(this);
   }
 
   componentDidMount() {
@@ -55,6 +58,34 @@ class App extends React.Component {
     this.postPage(layout);
   }
 
+  toggle(selection) {
+    this.state.currentSelection = {};
+
+    var panels = document.getElementsByClassName('panel-container');
+    for (var i = 0; i < panels.length; i++) {
+      if (panels[i] !== selection) {
+        panels[i].classList.remove('selected');
+      }
+    };
+
+    if (selection.classList.contains('selected')) {
+      selection.classList.remove('selected');
+    } else {
+      selection.classList.add('selected');
+      this.setState({ currentSelection: selection })
+    }
+  }
+
+  selectPanel(e) {
+    var currentSelection = e.target;
+
+    if (currentSelection.classList.contains('panel-container')) {
+      this.toggle(currentSelection);
+    } else {
+      this.toggle(currentSelection.parentNode);
+    }
+  }
+
   render() {
     return (
       <div>
@@ -73,7 +104,9 @@ class App extends React.Component {
             }
             return (
               <div key={panel.i}>
-                <img className='images' src={image_src} style={image_style}/>
+                <div className='panel-container' onClick={this.selectPanel}>
+                  <img className='images' src={image_src} style={image_style}/>
+                </div>
               </div>
             )
           })}
